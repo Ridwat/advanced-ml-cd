@@ -2,40 +2,36 @@ name: Advanced ML CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-test-docker:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run automated tests
+      - name: Run tests
         run: |
-          pytest tests/
+          PYTHONPATH=. pytest tests/
 
       - name: Build Docker image
         run: |
           docker build -t advanced-ml-cd .
 
-      - name: Run container health check
+      - name: Run container
         run: |
-          docker run -d -p 8000:8000 --name ml-api advanced-ml-cd
+          docker run -d -p 8000:8000 advanced-ml-cd
           sleep 10
           curl http://localhost:8000/health
