@@ -1,125 +1,62 @@
-# Advanced ML Continuous Delivery Pipeline 🚀
+# Continuous Delivery Practice: Sentiment API
 
-A production-style Machine Learning deployment project demonstrating **CI/CD, containerization, and automated testing** using FastAPI, Docker, and GitHub Actions.
+**Adetola Ridwat Odulaja** · Academic API & delivery project
 
-## Overview
+A FastAPI application demonstrating input validation, automated tests, containerization, and a CI workflow.
 
-This project simulates how ML models are deployed in real-world environments by:
+**Focus:** API behavior · Automated checks · Delivery workflow
 
-- Serving a model through an API
-- Containerizing the application with Docker
-- Automating testing and deployment using CI/CD
-- Ensuring reliability through validation and health checks
+## What is implemented
 
-## Project Structure
-advanced-ml-cd/
-├── .github/workflows/ci.yml
-├── app/
-│ ├── main.py
-│ └── model.onnx
-├── tests/
-│ └── test_app.py
-├── Dockerfile
-├── requirements.txt
-└── README.md
+- Status and health endpoints.
+- A sentiment endpoint accepting text.
+- Validation for empty text and text longer than 1,000 characters.
+- Positive, negative, or neutral classification using keyword rules.
+- Pytest tests, a Dockerfile, and a GitHub Actions workflow.
 
-## Tech Stack
+The API title references ONNX, but the current implementation does not load an ONNX model. The committed `app/model.onnx` is empty. This project demonstrates delivery mechanics around a rule-based service.
 
-- Python
-- FastAPI
-- ONNX Runtime
-- Docker
-- GitHub Actions
-- Pytest
+## Why it matters
 
-## Running Locally
+Reliable automation requires explicit input behavior and repeatable checks. This exercise shows how those concerns can be integrated with a service and its build workflow.
 
-Install dependencies:
+## Run locally
+
+From the repository root:
 
 ```bash
-pip install -r requirements.txtStart the API:
-
+pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
 
-Access the API:
+Open `http://127.0.0.1:8000/docs` for the interactive API schema.
 
-http://127.0.0.1:8000/docs
-Running with Docker
-
-Build image:
-
+```bash
+PYTHONPATH=. pytest tests/
 docker build -t advanced-ml-cd .
-
-Run container:
-
 docker run -p 8000:8000 advanced-ml-cd
-Access:http://localhost:8000/docs
-API Endpoints
-| Endpoint   | Method | Description          |
-| ---------- | ------ | -------------------- |
-| `/`        | GET    | API status           |
-| `/health`  | GET    | Health check         |
-| `/predict` | POST   | Sentiment prediction |
+```
+
+## Endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/` | Status message |
+| GET | `/health` | Health response |
+| POST | `/predict` | Keyword-based sentiment |
 
 Example request:
-{
-  "text": "I love this product"
-}
-Testing
 
-Run tests:
-pytest tests/
-Includes:
+```json
+{"text": "I love this product"}
+```
 
-Functional tests
-Edge cases
-Invalid input handling
-Malicious input testing
-CI/CD Pipeline
+## Continuous integration
 
-The pipeline automatically:
+[The workflow](.github/workflows/ci.yml) runs tests, builds an image, starts a container, and requests its health endpoint after pushes to main. A configured workflow does not establish that the latest run passed; this documentation review did not execute tests or a container.
 
-Installs dependencies
-Runs tests
-Builds Docker image
-Runs container health check
-Deployment Strategy
+## Limitations & next steps
 
-Supports modern deployment approaches such as:
+Substring matching does not reliably understand negation or context. `processing_time` currently records a timestamp, not elapsed processing duration. Blue-green and canary deployment are not implemented. Replace the rules with a validated model before describing this as ML inference.
 
-Blue-Green Deployment
-Canary Releases
-Monitoring & Reliability
-Health endpoint (/health)
-Logging during API execution
-CI validation before deployment
-Challenges
-Fixing Python import issues in CI
-Structuring project for Docker + GitHub Actions
-Handling invalid inputs safely
-Conclusion
-
-This project demonstrates how to transition an ML model from development to a reliable, production-ready system using MLOps best practices.
-
-# 🔥 WHY THIS VERSION IS BETTER
-
-- No messy numbering
-- Clean spacing
-- Proper headings
-- Easy to scan (this matters for grading)
-- Looks like real GitHub production project
-
-# 🚀 APPLY IT
-
-In PyCharm:
-
-1. Open `README.md`
-2. Replace everything
-3. Save
-
-Then:
-
-```bash
-git add README.md
-git commit -m "Improve README formatting"
-git push
+[Explore my portfolio](https://github.com/Ridwat/Ethical-AI-Analysis/blob/main/PORTFOLIO.md)
